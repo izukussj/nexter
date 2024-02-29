@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question de culture générale</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="question-box">
+            <h1>Question de culture générale</h1>
+            <p>{{ question.question }}</p>
+        </div>
+        <div class="answer-box">
+            <form method="post" action="/submit_answer">
+                <input type="text" name="user_answer" placeholder="Votre réponse">
+                <input type="submit" value="Soumettre">
+            </form>
+            {% if result %}
+                <p class="result">Mauvaise réponse. La bonne réponse est : {{ result }}</p>
+            {% endif %}
+        </div>
+        <div class="score-box">
+            <h2>Score</h2>
+            <p>{{ session.get('score', 0) }}</p>
+        </div>
+    </div>
+</body>
+</html>
