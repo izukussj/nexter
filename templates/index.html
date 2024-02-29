@@ -3,28 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question de culture générale</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>GENIE EN HERBE</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="question-box">
-            <h1>Question de culture générale</h1>
-            <p>{{ question.question }}</p>
+    <div class="card-body bg-geh text-white" style="border-radius: 50px;">
+        <div class="row mb-5">
+            <div class="col-3 text-center">
+                <span class="gras" title="No Question">
+                    <i class='bx bx-numbered'></i>
+                </span>
+                <br/>
+                <span class="badge badge-success" id="numero-question-index">
+                    00
+                </span>
+            </div>
+            <div class="col-6 text-center">
+                <span class="gras">Questions</span>
+                <br/>
+                <span class="badge badge-info" id="rubrique-index">
+                    Génies en Herbe
+                </span>
+            </div>
+            <div class="col-3 text-center">
+                <span class="gras" title="Chrono">
+                    <i class='bx bx-clock-time bx-sm'></i>
+                </span>
+                <br/>
+                <span class="badge badge-danger" id="chrono-index">
+                    00
+                </span>
+            </div>
         </div>
-        <div class="answer-box">
-            <form method="post" action="/submit_answer">
-                <input type="text" name="user_answer" placeholder="Votre réponse">
-                <input type="submit" value="Soumettre">
-            </form>
-            {% if result %}
-                <p class="result">Mauvaise réponse. La bonne réponse est : {{ result }}</p>
-            {% endif %}
+        <div class="row mb-4">
+            <div class="col-12 text-center gras" id="question-index">
+                {% if question %}
+                    {{ question.question }}
+                {% else %}
+                    Jeu Génies en Herbe comme vous le connaissez
+                {% endif %}
+            </div>
         </div>
-        <div class="score-box">
-            <h2>Score</h2>
-            <p>{{ session.get('score', 0) }}</p>
-        </div>
+        <form method="POST" action="/submit_answer" id="form-reponse-index">
+            <input type="hidden" name="" value="">
+            <input type="hidden" id="question-id-index" name="question_id" value="">
+            <input type="hidden" id="rubrique-code-index" name="rubrique_code" value="">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <input id="reponse-index" type="text" class="form-control text-center gras" 
+                           name="user_answer" value="" 
+                           autocomplete="off" style="border-radius: 10px;"
+                           required placeholder="Votre réponse ici">
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-success" id="btn-valider-index">
+                        Valider
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-4 text-center">
+                <span class="gras" title="Points">
+                    <i class="icofont-file-powerpoint"></i>
+                </span>
+                <br/>
+                <span class="badge badge-warning" id="point-index">
+                    {{ session.get('score', 0) }}
+                </span>
+            </div>
+            <div class="col-8 text-center">
+                <a href="#" class="btn btn-primary"  id="btn-question-suivante-index">
+                    Question suivante
+                </a>
+            </div>
+        </div>                
     </div>
 </body>
 </html>
+
