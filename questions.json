@@ -1,0 +1,15 @@
+
+[
+    {
+        "question": "Quelle est la capitale de la France ?",
+        "reponse": "Paris"
+    },
+    {
+        "question": "Qui a peint la Joconde ?",
+        "reponse": "Leonardo da Vinci"
+    },
+    {
+        "question": "Quel est le plus grand océan du monde ?",
+        "reponse": "Océan Pacifique"
+    }
+]

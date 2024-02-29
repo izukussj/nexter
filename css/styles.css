@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.question-box, .answer-box, .score-box {
+    margin-bottom: 20px;
+}
+
+.answer-box form {
+    display: flex;
+    align-items: center;
+}
+
+.answer-box input[type="text"] {
+    margin-right: 10px;
+}
+
+.result {
+    color: red;
+    font-weight: bold;
+}
