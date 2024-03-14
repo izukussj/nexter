@@ -3,31 +3,47 @@
 import { useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
-let socket: Socket
+let socket: Socket | null = null
 
 export const useSocket = () => {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    socket = io(process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:3000', {
-      path: '/api/socket/io',
-      addTrailingSlash: false,
-    })
+    // Only create socket if it doesn't exist
+    if (!socket) {
+      socket = io('http://localhost:3001', {
+        transports: ['websocket', 'polling'],
+        autoConnect: true
+      })
 
-    socket.on('connect', () => {
-      console.log('Connected to socket server')
+      socket.on('connect', () => {
+        console.log('Connected to socket server')
+        setIsConnected(true)
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from socket server')
+        setIsConnected(false)
+      })
+    }
+
+    // Check if already connected
+    if (socket.connected) {
       setIsConnected(true)
-    })
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from socket server')
-      setIsConnected(false)
-    })
+    }
 
     return () => {
-      socket.disconnect()
+      // Don't disconnect on unmount - keep the socket alive
     }
   }, [])
 
   return { socket, isConnected }
+}
+
+// Export function to manually disconnect
+export const disconnectSocket = () => {
+  if (socket) {
+    socket.disconnect()
+    socket = null
+  }
 }

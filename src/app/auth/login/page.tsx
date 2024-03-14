@@ -31,8 +31,19 @@ export default function LoginPage() {
         throw new Error(data.error || 'Login failed')
       }
 
+      // Sauvegarder dans le nouveau format
+      localStorage.setItem('nexter-user', JSON.stringify({
+        type: 'user',
+        username: data.user.username,
+        id: data.user.id,
+        email: data.user.email,
+        elo: data.user.elo
+      }))
+      
+      // Garder l'ancien format pour compatibilité
       localStorage.setItem('user', JSON.stringify(data.user))
-      router.push('/dashboard')
+      
+      router.push('/')
     } catch (err: any) {
       setError(err.message)
     } finally {

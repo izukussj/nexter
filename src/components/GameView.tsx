@@ -39,6 +39,7 @@ export default function GameView({ socket }: GameViewProps) {
     if (!socket) return
 
     socket.on('game-started', (data) => {
+      console.log('Game started event received:', data)
       setGameId(data.gameId)
       setPlayers(data.players)
     })
@@ -81,23 +82,31 @@ export default function GameView({ socket }: GameViewProps) {
   }, [socket])
 
   useEffect(() => {
-    if (currentQuestion && !showResults && !hasAnswered) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer)
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
+    if (!socket) return
 
-      return () => clearInterval(timer)
+    socket.on('timer-update', (data) => {
+      setTimeLeft(data.timeLeft)
+    })
+
+    return () => {
+      socket.off('timer-update')
+    }
+  }, [socket])
+
+  useEffect(() => {
+    if (currentQuestion && !showResults && !hasAnswered) {
+      setTimeLeft(30) // Reset initial
     }
   }, [currentQuestion, showResults, hasAnswered])
 
   const submitAnswer = () => {
     if (!answer.trim() || hasAnswered || !currentQuestion) return
+
+    console.log('Submitting answer:', {
+      gameId,
+      answer: answer.trim(),
+      questionId: currentQuestion.id
+    })
 
     socket.emit('submit-answer', {
       gameId,
