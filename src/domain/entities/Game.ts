@@ -14,7 +14,7 @@ export interface GameData {
 
 export class Game {
   private status: GameStatus = 'waiting'
-  private currentQuestionIndex: number = 0
+  private currentQuestionIndex: number = -1
   private questionStartTime: Date | null = null
 
   private constructor(
@@ -54,7 +54,7 @@ export class Game {
   }
 
   getCurrentQuestion(): Question | null {
-    if (this.currentQuestionIndex >= this.questions.length) {
+    if (this.currentQuestionIndex < 0 || this.currentQuestionIndex >= this.questions.length) {
       return null
     }
     return this.questions[this.currentQuestionIndex]
@@ -80,10 +80,13 @@ export class Game {
       throw new Error('Cannot start question when game is not in progress')
     }
     
-    const currentQuestion = this.getCurrentQuestion()
-    if (!currentQuestion) {
-      this.finishGame()
-      return
+    // Move to next question if we don't have a current one
+    if (this.getCurrentQuestion() === null) {
+      this.moveToNextQuestion()
+      if (this.getCurrentQuestion() === null) {
+        this.finishGame()
+        return
+      }
     }
 
     this.questionStartTime = new Date()
